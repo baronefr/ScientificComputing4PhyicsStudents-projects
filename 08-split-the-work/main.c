@@ -34,9 +34,10 @@ int main() {
 
     double x[n], y[n], d[n];
     double *partial_chunk_sum, *d_chunk;
-    srand(12345);
 
-    // fill x and y with random numbers
+    srand(12345); // fix the seed for reproducibility
+
+    // fill x and y with random numbers in [-1,1]
     for (int i = 0; i < n; i++) {
         x[i] = ((double) rand() / RAND_MAX) * 2.0 - 1.0;
         y[i] = ((double) rand() / RAND_MAX) * 2.0 - 1.0;
