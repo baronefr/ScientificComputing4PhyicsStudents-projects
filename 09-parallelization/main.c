@@ -32,14 +32,12 @@ void daxpy(double *d, double a, double *x, double *y, int n) {
 }
 
 void daxpy_openmp(double *d, double a, double *x, double *y, int n) {
-#pragma omp parallel for
-    for (int i = 0; i < n; i++) {
-        d[i] = a * x[i] + y[i];
-    }
+    #pragma omp parallel for
+    for (int i = 0; i < n; i++) d[i] = a * x[i] + y[i];
 }
 
 void daxpy_mpi(double *d, double a, double *x, double *y, int n, int rank, int nprocs, MPI_Comm comm) {
-    int chunk = (n + nprocs - 1) / nprocs;  // ceiling division
+    int chunk = (n + nprocs - 1) / nprocs;
     int start = rank * chunk;
     int end   = (start + chunk > n) ? n : (start + chunk);
 
@@ -48,8 +46,7 @@ void daxpy_mpi(double *d, double a, double *x, double *y, int n, int rank, int n
     }
 
     // gather results on root (rank 0)
-    MPI_Allgather(MPI_IN_PLACE, 0, MPI_DATATYPE_NULL,
-                  d, chunk, MPI_DOUBLE, comm);
+    MPI_Allgather(MPI_IN_PLACE, 0, MPI_DATATYPE_NULL, d, chunk, MPI_DOUBLE, comm);
 }
 
 
@@ -72,7 +69,7 @@ double reduce_mpi(double *d, int n, MPI_Comm comm) {
 
     int chunk = (n + nprocs - 1) / nprocs;
     int start = rank * chunk;
-    int end   = (start + chunk > n) ? n : (start + chunk);
+    int end   = (start + chunk > n) ? n : (start + chunk); // limit upper limit to n
 
     for (int i = start; i < end; i++) 
         local += d[i];
