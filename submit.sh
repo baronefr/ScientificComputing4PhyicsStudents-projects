@@ -5,5 +5,3 @@ for _dir in "$1-"*; do
     tar -cvf "$1-handout.tar" "$_dir"
     break
 done
-
-
