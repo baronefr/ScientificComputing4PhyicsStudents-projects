@@ -20,3 +20,5 @@ Kahan fails as well. The reason is that the comulative variable `c` keeps track 
 I implement [Neumaier's variant](https://en.wikipedia.org/wiki/Kahan_summation_algorithm) of the Kahan algorithm, which is able to fix the sum.
 
 ## Subtask B
+
+To check for correctness, I test the statistical properties of the resulting sum.
