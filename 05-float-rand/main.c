@@ -32,16 +32,17 @@ double kahan_sum(double *vec, int n) {
 }
 
 // Kahan–Babuška–Neumaier summation
-double kbn_sum(const double *a, int n) {
-    double sum = a[0];
+double kbn_sum(double *vec, int n) {
+    double sum = vec[0];
     double c = 0.0; // correction
+    double t;
 
     for (int i = 1; i < n; i++) {
-        double t = sum + a[i];
-        if (fabs(sum) >= fabs(a[i])) {
-            c += (sum - t) + a[i];
+        t = sum + vec[i];
+        if (fabs(sum) >= fabs(vec[i])) {
+            c += (sum - t) + vec[i];
         } else {
-            c += (a[i] - t) + sum;
+            c += (vec[i] - t) + sum;
         }
         sum = t;
     }
@@ -49,9 +50,9 @@ double kbn_sum(const double *a, int n) {
 }
 
 double gsl_wrapped_sum(double *vec, int n) {
-    // first I create a gsl_vector_view from the array
+    // first I create a gsl_vector_view from the array ...
     gsl_vector_view v = gsl_vector_view_array(vec, n);
-    // then I call gsl_vector_sum
+    // ... then I call gsl_vector_sum
     return gsl_vector_sum(&v.vector);
 }
 
@@ -66,28 +67,26 @@ void daxpy(double a, double *x, double *y, int n) {
 
 // Gaussian RNG (Box-Muller)
 double gaussian_random() {
-    double u1 = ((double) rand() + 1.0) / ((double) RAND_MAX + 2.0);
-    double u2 = ((double) rand() + 1.0) / ((double) RAND_MAX + 2.0);
+    double u1 = ((double)rand() + 1.0) / ((double) RAND_MAX + 2.0);
+    double u2 = ((double)rand() + 1.0) / ((double) RAND_MAX + 2.0);
     return sqrt(-2.0 * log(u1)) * cos(2.0 * M_PI * u2);
 }
 
 // create a vector of n Gaussian random numbers
 void fill_gaussian(double *vec, int n) {
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++)
         vec[i] = gaussian_random();
-    }
 }
 
-// Test: check sum of (x+y) by direct calculation
+// test: check sum of (x+y) by direct calculation
 double test_sum(double *x, double *y, int n) {
     double s = 0.0;
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++)
         s += x[i] + y[i];
-    }
     return s;
 }
 
-// ---------- Statistics ----------
+// Statistics ----------
 double compute_mean(const double *vec, int n) {
     double sum = 0.0;
     for (int i = 0; i < n; i++) sum += vec[i];
@@ -96,8 +95,9 @@ double compute_mean(const double *vec, int n) {
 
 double compute_std(const double *vec, int n, double mean) {
     double sumsq = 0.0;
+    double diff;
     for (int i = 0; i < n; i++) {
-        double diff = vec[i] - mean;
+        diff = vec[i] - mean;
         sumsq += diff * diff;
     }
     return sqrt(sumsq / n);
