@@ -5,9 +5,13 @@ The text in the boxes represents the outputs from `main.py`.
 ## 1+2: c2c FFT
 
 This question asks us to perform c2c FFT of matrix $A$ and reconstruct the original matrix by inverting the FFT ($A_r$). The Python script then computes statistical indicators of the reconstruction accuracy:
+
 $$RMSE_{abs} = \sqrt{\mathrm{mean}((A-A_r)^2)}$$
+
 $$RMED_{abs} = \sqrt{\mathrm{median}((A-A_r)^2)}$$
+
 $$RMSE_{rel} = \sqrt{\mathrm{mean}(((A-A_r)/A)^2)}$$
+
 $$RMED_{rel} = \sqrt{\mathrm{median}(((A-A_r)/A)^2)}$$
 
 ```bash
@@ -51,4 +55,7 @@ Question 6:
 The FFT of a real matrix is hermitian-symmetric: the negative frequency terms are just the complex conjugates of the corresponding positive-frequency terms, and the negative-frequency terms are therefore redundant. 
 The rFFT routine from scipy returns only the positive-frequency terms in form of a triangular matrix.
 Knowing this, the output of a complex FFT (which instead computes explicitly all the frequency terms) can be obtained from the complex conjugate of the rFFT matrix:
-$$F[i,j] = conj(F[-i mod n, -j mod n])\quad .$$
+
+```math
+F[i,j] = conj(F[-i \mod n, -j \mod n])\quad .
+```
